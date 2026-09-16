@@ -7,6 +7,40 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Data folder (ignore raw data/processing files, track only production products.json)
+data/*
+!data/products.json
+
+
+# Testing artifacts (keep screenshots, ignore temp traces/reports)
+test-results/
+playwright-report/
+blob-report/
+.nyc_output/# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
 # Dependencies & Build Output
 node_modules
 dist
