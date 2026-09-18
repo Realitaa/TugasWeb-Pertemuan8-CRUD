@@ -24,6 +24,8 @@
             "Composer\\Config::disableProcessTimeout",
             "@php bin/dev.php"
         ],
+        "db:pdo": "@php bin/pdo.php",
+        "db:migrate": "@php bin/migrate.php",
         "test": "phpunit"
     }
 }
