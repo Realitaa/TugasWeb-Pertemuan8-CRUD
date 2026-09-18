@@ -1,4 +1,4 @@
-import productsData from '../data/products.json'
+import productsData from '../../data/products.json'
 import { renderPagination } from './pagination.js'
 import { formatRupiah, calculateOriginalPrice, getTimeStatus, scrollToElement } from './utils.js'
 import { fullname, phone } from './initVal.js'
@@ -79,5 +79,3 @@ export function setupProducts() {
   // Initial render
   displayProducts(1)
 }
-
-

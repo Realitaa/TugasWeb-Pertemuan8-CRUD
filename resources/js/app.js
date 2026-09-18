@@ -1,4 +1,4 @@
-import './style.css'
+import '../css/app.css'
 import { setupNavbar } from './navbar.js'
 import { setupProducts } from './products.js'
 import './initVal.js'

@@ -70,7 +70,7 @@ export default defineConfig(({ mode }) => {
 
             rollupOptions: {
                 input: {
-                    main: path.resolve(rootPath, 'src/main.js'),
+                    main: path.resolve(rootPath, 'resources/js/app.js'),
                 },
             },
         },

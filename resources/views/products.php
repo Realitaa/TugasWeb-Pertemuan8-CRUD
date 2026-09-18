@@ -19,7 +19,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet" />
-    <?= vite()->tags('src/main.js') ?>
+    <?php
+    try {
+        echo vite()->tags('resources/js/app.js');
+    } catch (\RuntimeException $e) {
+        if (str_contains($e->getMessage(), 'not found in manifest')) {
+            echo vite()->tags('src/main.js');
+        } else {
+            throw $e;
+        }
+    }
+    ?>
   </head>
   <body class="bg-canvas text-primary transition-colors duration-200">
     <div id="app"></div>

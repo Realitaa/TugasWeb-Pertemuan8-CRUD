@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import fs from 'fs'
 import path from 'path'
-import { setupProducts } from '../src/products.js'
+import { setupProducts } from '../resources/js/products.js'
 
 describe('Tailwind CSS Responsive Utility Classes & Structure', () => {
   beforeEach(() => {

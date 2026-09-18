@@ -16,11 +16,11 @@ if ($path === '') {
 switch ($path) {
     case '/':
     case '/index.php':
-        require __DIR__ . '/pages/home.php';
+        require __DIR__ . '/resources/views/home.php';
         break;
 
     case '/products':
-        require __DIR__ . '/pages/products.php';
+        require __DIR__ . '/resources/views/products.php';
         break;
 
     default:
@@ -32,7 +32,17 @@ switch ($path) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>404 - Halaman Tidak Ditemukan</title>
-    <?= vite()->tags('src/main.js') ?>
+    <?php
+    try {
+        echo vite()->tags('resources/js/app.js');
+    } catch (\RuntimeException $e) {
+        if (str_contains($e->getMessage(), 'not found in manifest')) {
+            echo vite()->tags('src/main.js');
+        } else {
+            throw $e;
+        }
+    }
+    ?>
   </head>
   <body class="bg-canvas text-primary min-h-screen flex items-center justify-center p-4">
     <div class="text-center max-w-md">
