@@ -33,3 +33,8 @@ export function showToast(message, type = 'info') {
     className: `custom-toast custom-toast-${type}`,
   }).showToast()
 }
+
+if (typeof window !== 'undefined') {
+  window.showToast = showToast
+}
+

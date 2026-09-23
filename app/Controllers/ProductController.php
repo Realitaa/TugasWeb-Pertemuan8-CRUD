@@ -36,6 +36,25 @@ class ProductController
     }
 
     /**
+     * Export products to CSV file.
+     */
+    public function export(): void
+    {
+        $search = isset($_GET['q']) ? trim((string) $_GET['q']) : null;
+        $csvContent = $this->productService->exportProductsCsv($search);
+
+        $filename = 'laporan-produk-' . date('Y-m-d') . '.csv';
+
+        header('Content-Type: text/csv; charset=UTF-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        echo $csvContent;
+        exit(0);
+    }
+
+    /**
      * Show form for creating a new product.
      */
     public function create(): void

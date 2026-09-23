@@ -42,6 +42,10 @@ switch ($path) {
         }
         break;
 
+    case '/products/export':
+        $productController->export();
+        break;
+
     case '/products/create':
         if ($method === 'POST') {
             $productController->store();

@@ -92,6 +92,49 @@ class ProductRepository
     }
 
     /**
+     * Retrieve all products with category and supplier relations (optional search filter).
+     *
+     * @return array<Product>
+     */
+    public function allWithRelations(?string $search = null): array
+    {
+        $whereClause = '';
+        $params = [];
+
+        $trimmedSearch = trim((string) $search);
+        if ($trimmedSearch !== '') {
+            $whereClause = 'WHERE (p.name LIKE :search_name OR p.sku LIKE :search_sku OR c.name LIKE :search_cat OR s.name LIKE :search_sup)';
+            $searchWildcard = '%' . $trimmedSearch . '%';
+            $params[':search_name'] = $searchWildcard;
+            $params[':search_sku'] = $searchWildcard;
+            $params[':search_cat'] = $searchWildcard;
+            $params[':search_sup'] = $searchWildcard;
+        }
+
+        $sql = "
+            SELECT 
+                p.*,
+                c.name AS category_name,
+                s.name AS supplier_name
+            FROM products p
+            LEFT JOIN categories c ON p.category_id = c.id
+            LEFT JOIN suppliers s ON p.supplier_id = s.id
+            {$whereClause}
+            ORDER BY p.id DESC
+        ";
+
+        $stmt = $this->pdo->prepare($sql);
+        foreach ($params as $key => $val) {
+            $stmt->bindValue($key, $val, PDO::PARAM_STR);
+        }
+        $stmt->execute();
+
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return array_map(fn(array $row) => Product::fromArray($row), $rows);
+    }
+
+    /**
      * Find single product by ID with category and supplier relations.
      */
     public function findById(int $id): ?Product

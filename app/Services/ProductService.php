@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Realitaa\PhpVite\Services;
 
-use InvalidArgumentException;
+use League\Csv\Writer;
 use Realitaa\PhpVite\Models\Category;
 use Realitaa\PhpVite\Models\Product;
 use Realitaa\PhpVite\Models\Supplier;
@@ -30,6 +30,33 @@ class ProductService
     public function getPaginatedProducts(int $page = 1, int $perPage = 10, ?string $search = null): array
     {
         return $this->productRepo->paginate($page, $perPage, $search);
+    }
+
+    /**
+     * Export all products matching search to CSV format using League\Csv\Writer.
+     */
+    public function exportProductsCsv(?string $search = null): string
+    {
+        $products = $this->productRepo->allWithRelations($search);
+
+        $csv = Writer::fromString();
+        $csv->insertOne(['No', 'SKU', 'Nama Produk', 'Kategori', 'Supplier', 'Harga (Rp)', 'Stok', 'Status Stok']);
+
+        foreach ($products as $idx => $product) {
+            $status = $product->stock <= 0 ? 'Habis' : ($product->stock < 10 ? 'Sisa Sedikit' : 'Tersedia');
+            $csv->insertOne([
+                $idx + 1,
+                $product->sku,
+                $product->name,
+                $product->categoryName ?? 'Tanpa Kategori',
+                $product->supplierName ?? '-',
+                $product->price,
+                $product->stock,
+                $status,
+            ]);
+        }
+
+        return $csv->toString();
     }
 
     /**
