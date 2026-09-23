@@ -144,9 +144,14 @@ class ProductController
         }
 
         $productName = $product->name;
-        $this->productService->deleteProduct($id);
+        $deleted = $this->productService->deleteProduct($id);
 
-        flash('success', "Produk \"{$productName}\" berhasil dihapus!");
+        if ($deleted) {
+            flash('success', "Produk \"{$productName}\" berhasil dihapus!");
+        } else {
+            flash('error', "Gagal menghapus produk \"{$productName}\". Transaksi dibatalkan.");
+        }
+
         redirect('/products');
     }
 }

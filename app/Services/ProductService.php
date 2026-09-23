@@ -11,6 +11,8 @@ use Realitaa\PhpVite\Models\Supplier;
 use Realitaa\PhpVite\Repositories\CategoryRepository;
 use Realitaa\PhpVite\Repositories\ProductRepository;
 use Realitaa\PhpVite\Repositories\SupplierRepository;
+use RuntimeException;
+use Throwable;
 
 class ProductService
 {
@@ -120,11 +122,68 @@ class ProductService
     }
 
     /**
-     * Delete product by ID.
+     * Delete product by ID within a database transaction and write log to storage/logs/database.log.
      */
     public function deleteProduct(int $id): bool
     {
-        return $this->productRepo->delete($id);
+        $product = $this->productRepo->findById($id);
+        if ($product === null) {
+            return false;
+        }
+
+        $logDir = dirname(__DIR__, 2) . '/storage/logs';
+        $logFile = $logDir . '/database.log';
+
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0755, true);
+        }
+
+        $this->productRepo->beginTransaction();
+
+        try {
+            $deleted = $this->productRepo->delete($id);
+            if (!$deleted) {
+                throw new RuntimeException("Gagal menghapus data produk dengan ID {$id} dari database.");
+            }
+
+            // Tulis entri log transaksi ke storage/logs/database.log
+            $timestamp = date('Y-m-d H:i:s');
+            $logMessage = sprintf(
+                "[%s] [TRANSACTION_COMMITTED] Action: DELETE_PRODUCT | ID: %d | SKU: %s | Name: \"%s\" | Price: %s | Stock: %d | Category: \"%s\" | Supplier: \"%s\"" . PHP_EOL,
+                $timestamp,
+                $product->id,
+                $product->sku,
+                $product->name,
+                $product->getFormattedPrice(),
+                $product->stock,
+                $product->categoryName ?? '-',
+                $product->supplierName ?? '-'
+            );
+
+            $writeResult = file_put_contents($logFile, $logMessage, FILE_APPEND | LOCK_EX);
+            if ($writeResult === false) {
+                throw new RuntimeException("Gagal menulis log transaksi ke file [{$logFile}].");
+            }
+
+            $this->productRepo->commit();
+            return true;
+        } catch (Throwable $e) {
+            if ($this->productRepo->inTransaction()) {
+                $this->productRepo->rollBack();
+            }
+
+            // Catat kegagalan / rollback ke storage/logs/database.log
+            $timestamp = date('Y-m-d H:i:s');
+            $errorLog = sprintf(
+                "[%s] [TRANSACTION_ROLLBACK] Action: DELETE_PRODUCT | ID: %d | Error: %s" . PHP_EOL,
+                $timestamp,
+                $id,
+                $e->getMessage()
+            );
+            @file_put_contents($logFile, $errorLog, FILE_APPEND | LOCK_EX);
+
+            return false;
+        }
     }
 
     /**

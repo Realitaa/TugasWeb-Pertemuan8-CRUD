@@ -198,4 +198,39 @@ class ProductRepository
         $stmt = $this->pdo->prepare("DELETE FROM products WHERE id = :id");
         return $stmt->execute([':id' => $id]);
     }
+
+    /**
+     * Begin a database transaction.
+     */
+    public function beginTransaction(): bool
+    {
+        return $this->pdo->beginTransaction();
+    }
+
+    /**
+     * Commit the current database transaction.
+     */
+    public function commit(): bool
+    {
+        return $this->pdo->commit();
+    }
+
+    /**
+     * Rollback the current database transaction.
+     */
+    public function rollBack(): bool
+    {
+        if ($this->pdo->inTransaction()) {
+            return $this->pdo->rollBack();
+        }
+        return false;
+    }
+
+    /**
+     * Check if currently in an active transaction.
+     */
+    public function inTransaction(): bool
+    {
+        return $this->pdo->inTransaction();
+    }
 }
