@@ -23,13 +23,13 @@
           type="text" 
           id="name" 
           name="name" 
-          value="<?= htmlspecialchars($old['name'] ?? '') ?>" 
+          value="<?= e($old['name'] ?? '') ?>" 
           placeholder="Contoh: Wireless Bluetooth Headset" 
           class="py-2.5 px-3.5 block w-full rounded-lg border <?= isset($errors['name']) ? 'border-rose-500 ring-1 ring-rose-500' : 'border-border' ?> bg-canvas text-primary text-sm focus:border-brand focus:ring-1 focus:ring-brand focus:outline-hidden transition-colors"
           required
         >
         <?php if (isset($errors['name'])): ?>
-          <p class="text-xs text-rose-500 mt-1"><?= htmlspecialchars($errors['name']) ?></p>
+          <p class="text-xs text-rose-500 mt-1"><?= e($errors['name']) ?></p>
         <?php endif; ?>
       </div>
 
@@ -43,7 +43,7 @@
             type="text" 
             id="sku" 
             name="sku" 
-            value="<?= htmlspecialchars($old['sku'] ?? '') ?>" 
+            value="<?= e($old['sku'] ?? '') ?>" 
             placeholder="Contoh: ELE-BLU-HEA-001" 
             class="py-2.5 px-3.5 block w-full font-mono rounded-lg border <?= isset($errors['sku']) ? 'border-rose-500 ring-1 ring-rose-500' : 'border-border' ?> bg-canvas text-primary text-sm focus:border-brand focus:ring-1 focus:ring-brand focus:outline-hidden uppercase transition-colors"
             required
@@ -51,7 +51,7 @@
         </div>
         <p class="text-xs text-muted mt-1">Hanya huruf besar, angka, dan strip (-). Pastikan belum pernah digunakan.</p>
         <?php if (isset($errors['sku'])): ?>
-          <p class="text-xs text-rose-500 mt-1"><?= htmlspecialchars($errors['sku']) ?></p>
+          <p class="text-xs text-rose-500 mt-1"><?= e($errors['sku']) ?></p>
         <?php endif; ?>
       </div>
 
@@ -72,13 +72,13 @@
               <?php foreach ($categories as $cat): ?>
                 <?php $selected = (string)($old['category_id'] ?? '') === (string)$cat->id ? 'selected' : ''; ?>
                 <option value="<?= $cat->id ?>" <?= $selected ?>>
-                  <?= htmlspecialchars($cat->name) ?>
+                  <?= e($cat->name) ?>
                 </option>
               <?php endforeach; ?>
             </select>
           </div>
           <?php if (isset($errors['category_id'])): ?>
-            <p class="text-xs text-rose-500 mt-1"><?= htmlspecialchars($errors['category_id']) ?></p>
+            <p class="text-xs text-rose-500 mt-1"><?= e($errors['category_id']) ?></p>
           <?php endif; ?>
         </div>
 
@@ -97,13 +97,13 @@
               <?php foreach ($suppliers as $sup): ?>
                 <?php $selected = (string)($old['supplier_id'] ?? '') === (string)$sup->id ? 'selected' : ''; ?>
                 <option value="<?= $sup->id ?>" <?= $selected ?>>
-                  <?= htmlspecialchars($sup->name) ?>
+                  <?= e($sup->name) ?>
                 </option>
               <?php endforeach; ?>
             </select>
           </div>
           <?php if (isset($errors['supplier_id'])): ?>
-            <p class="text-xs text-rose-500 mt-1"><?= htmlspecialchars($errors['supplier_id']) ?></p>
+            <p class="text-xs text-rose-500 mt-1"><?= e($errors['supplier_id']) ?></p>
           <?php endif; ?>
         </div>
       </div>
@@ -125,14 +125,14 @@
               name="price" 
               step="1" 
               min="0"
-              value="<?= htmlspecialchars((string)($old['price'] ?? '')) ?>" 
+              value="<?= e($old['price'] ?? '') ?>" 
               placeholder="0" 
               class="py-2.5 ps-10 pe-3.5 block w-full rounded-lg border <?= isset($errors['price']) ? 'border-rose-500 ring-1 ring-rose-500' : 'border-border' ?> bg-canvas text-primary text-sm focus:border-brand focus:ring-1 focus:ring-brand focus:outline-hidden transition-colors"
               required
             >
           </div>
           <?php if (isset($errors['price'])): ?>
-            <p class="text-xs text-rose-500 mt-1"><?= htmlspecialchars($errors['price']) ?></p>
+            <p class="text-xs text-rose-500 mt-1"><?= e($errors['price']) ?></p>
           <?php endif; ?>
         </div>
 
@@ -147,13 +147,13 @@
             name="stock" 
             step="1" 
             min="0"
-            value="<?= htmlspecialchars((string)($old['stock'] ?? '0')) ?>" 
+            value="<?= e($old['stock'] ?? '0') ?>" 
             placeholder="0" 
             class="py-2.5 px-3.5 block w-full rounded-lg border <?= isset($errors['stock']) ? 'border-rose-500 ring-1 ring-rose-500' : 'border-border' ?> bg-canvas text-primary text-sm focus:border-brand focus:ring-1 focus:ring-brand focus:outline-hidden transition-colors"
             required
           >
           <?php if (isset($errors['stock'])): ?>
-            <p class="text-xs text-rose-500 mt-1"><?= htmlspecialchars($errors['stock']) ?></p>
+            <p class="text-xs text-rose-500 mt-1"><?= e($errors['stock']) ?></p>
           <?php endif; ?>
         </div>
       </div>

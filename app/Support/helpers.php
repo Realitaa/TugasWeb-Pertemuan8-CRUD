@@ -100,3 +100,18 @@ if (!function_exists('redirect')) {
         exit(0);
     }
 }
+
+if (!function_exists('e')) {
+    /**
+     * Escape HTML entities in a string.
+     */
+    function e(mixed $value, bool $doubleEncode = true): string
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', $doubleEncode);
+    }
+}
+

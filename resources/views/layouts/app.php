@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?= htmlspecialchars($title ?? 'RealCommerce - Sistem Inventaris & Katalog') ?></title>
+    <title><?= e($title ?? 'RealCommerce - Sistem Inventaris & Katalog') ?></title>
     <meta name="description" content="Sistem Manajemen Produk dan Katalog Online RealCommerce" />
     <meta name="robots" content="index, follow" />
 
@@ -31,8 +31,8 @@
     <?php $flash = get_flash(); ?>
     <?php if ($flash): ?>
       <div id="flash-message" 
-           data-type="<?= htmlspecialchars($flash['type']) ?>" 
-           data-message="<?= htmlspecialchars($flash['message']) ?>" 
+           data-type="<?= e($flash['type']) ?>" 
+           data-message="<?= e($flash['message']) ?>" 
            class="hidden"></div>
     <?php endif; ?>
 

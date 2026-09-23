@@ -6,11 +6,25 @@
       <p class="text-sm text-muted mt-1">Daftar inventaris lengkap dengan kategori dan pemasok (supplier).</p>
     </div>
 
-    <div class="flex items-center gap-3">
+    <div class="flex flex-wrap items-center gap-3">
+      <!-- Tombol Tambah Produk -->
       <a href="/products/create" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg bg-brand text-white hover:bg-brand-hover shadow-xs focus:outline-hidden transition-colors">
         <iconify-icon icon="lucide:plus" class="size-4.5"></iconify-icon>
         <span>Tambah Produk</span>
       </a>
+
+      <!-- Tombol Export Laporan -->
+      <button 
+        type="button" 
+        id="btn-export-csv" 
+        class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-border bg-surface text-primary hover:bg-hover shadow-xs focus:outline-hidden transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+        title="Export Data Produk ke format CSV"
+      >
+        <span id="export-icon" class="flex items-center justify-center">
+          <iconify-icon icon="lucide:file-spreadsheet" class="size-4.5 text-brand"></iconify-icon>
+        </span>
+        <span id="export-text">Export Laporan</span>
+      </button>
     </div>
   </div>
 
@@ -24,7 +38,7 @@
         <input 
           type="text" 
           name="q" 
-          value="<?= htmlspecialchars($search) ?>" 
+          value="<?= e($search) ?>" 
           placeholder="Cari berdasarkan nama produk, SKU, kategori, atau supplier..." 
           class="py-2 ps-10 pe-4 block w-full rounded-lg border border-border bg-canvas text-primary text-sm focus:border-brand focus:ring-1 focus:ring-brand focus:outline-hidden transition-colors"
         >
@@ -88,26 +102,26 @@
 
                 <!-- SKU -->
                 <td class="py-3 px-4 font-mono text-xs text-primary font-medium whitespace-nowrap">
-                  <?= htmlspecialchars($product->sku) ?>
+                  <?= e($product->sku) ?>
                 </td>
 
                 <!-- Nama Produk -->
-                <td class="py-3 px-4 font-medium text-primary max-w-xs truncate" title="<?= htmlspecialchars($product->name) ?>">
-                  <?= htmlspecialchars($product->name) ?>
+                <td class="py-3 px-4 font-medium text-primary max-w-xs truncate" title="<?= e($product->name) ?>">
+                  <?= e($product->name) ?>
                 </td>
 
                 <!-- Kategori (JOIN 1) -->
                 <td class="py-3 px-4 whitespace-nowrap">
                   <span class="inline-flex items-center py-0.5 px-2.5 rounded-full text-xs font-medium bg-brand/10 text-brand border border-brand/20">
-                    <?= htmlspecialchars($product->categoryName ?? 'Tanpa Kategori') ?>
+                    <?= e($product->categoryName ?? 'Tanpa Kategori') ?>
                   </span>
                 </td>
 
                 <!-- Supplier (JOIN 2) -->
-                <td class="py-3 px-4 text-muted whitespace-nowrap" title="<?= htmlspecialchars($product->supplierName ?? '-') ?>">
+                <td class="py-3 px-4 text-muted whitespace-nowrap" title="<?= e($product->supplierName ?? '-') ?>">
                   <span class="inline-flex items-center gap-1.5">
                     <iconify-icon icon="lucide:truck" class="size-3.5 text-muted shrink-0"></iconify-icon>
-                    <span class="text-xs sm:text-sm"><?= htmlspecialchars($product->supplierName ?? '-') ?></span>
+                    <span class="text-xs sm:text-sm"><?= e($product->supplierName ?? '-') ?></span>
                   </span>
                 </td>
 
@@ -140,7 +154,7 @@
                     <a 
                       href="/products/edit?id=<?= $product->id ?>" 
                       class="size-8 inline-flex items-center justify-center rounded-lg border border-border text-primary hover:text-brand hover:border-brand/40 hover:bg-hover focus:outline-hidden transition-colors"
-                      title="Edit Produk <?= htmlspecialchars($product->name) ?>"
+                      title="Edit Produk <?= e($product->name) ?>"
                       aria-label="Edit Produk"
                     >
                       <iconify-icon icon="lucide:square-pen" class="size-4"></iconify-icon>
@@ -151,8 +165,8 @@
                       type="button" 
                       class="btn-delete size-8 inline-flex items-center justify-center rounded-lg border border-border text-primary hover:text-rose-600 hover:border-rose-500/40 hover:bg-rose-500/10 focus:outline-hidden transition-colors cursor-pointer"
                       data-id="<?= $product->id ?>"
-                      data-name="<?= htmlspecialchars($product->name) ?>"
-                      title="Hapus Produk <?= htmlspecialchars($product->name) ?>"
+                      data-name="<?= e($product->name) ?>"
+                      title="Hapus Produk <?= e($product->name) ?>"
                       aria-label="Hapus Produk"
                     >
                       <iconify-icon icon="lucide:trash-2" class="size-4"></iconify-icon>
@@ -285,9 +299,10 @@
   </div>
 </div>
 
-<!-- Inisialisasi Script Modal Hapus -->
+<!-- Inisialisasi Script Modal Hapus & Export CSV -->
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // 1. Script Modal Hapus
     const modal = document.getElementById('delete-modal');
     const deleteIdInput = document.getElementById('delete-product-id');
     const deleteNameSpan = document.getElementById('delete-product-name');
@@ -327,6 +342,52 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !modal?.classList.contains('hidden')) {
         closeModal();
+      }
+    });
+
+    // 2. Script Export CSV (Fetch Asynchronous)
+    const exportBtn = document.getElementById('btn-export-csv');
+    const exportIcon = document.getElementById('export-icon');
+    const exportText = document.getElementById('export-text');
+
+    exportBtn?.addEventListener('click', async () => {
+      exportBtn.disabled = true;
+      exportIcon.innerHTML = '<iconify-icon icon="lucide:loader-2" class="size-4.5 animate-spin text-brand"></iconify-icon>';
+      exportText.textContent = 'Mengekspor...';
+
+      try {
+        const searchParams = new URLSearchParams(window.location.search);
+        const q = searchParams.get('q') || '';
+        const exportUrl = '/products/export' + (q ? `?q=${encodeURIComponent(q)}` : '');
+
+        const response = await fetch(exportUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        const today = new Date().toISOString().slice(0, 10);
+        a.download = `laporan-produk-${today}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(downloadUrl);
+
+        if (typeof window.showToast === 'function') {
+          window.showToast('Laporan produk berhasil diekspor!', 'success');
+        }
+      } catch (err) {
+        console.error('Export CSV error:', err);
+        if (typeof window.showToast === 'function') {
+          window.showToast('Gagal mengekspor laporan produk.', 'error');
+        }
+      } finally {
+        exportBtn.disabled = false;
+        exportIcon.innerHTML = '<iconify-icon icon="lucide:file-spreadsheet" class="size-4.5 text-brand"></iconify-icon>';
+        exportText.textContent = 'Export Laporan';
       }
     });
   });

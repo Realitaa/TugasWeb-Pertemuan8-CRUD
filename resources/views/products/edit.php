@@ -13,7 +13,7 @@
   <div class="flex items-center justify-between gap-4">
     <div>
       <h1 class="text-2xl font-bold text-primary tracking-tight">Edit Produk</h1>
-      <p class="text-sm text-muted mt-1">Perbarui data produk <strong class="text-primary"><?= htmlspecialchars($product->name) ?></strong>.</p>
+      <p class="text-sm text-muted mt-1">Perbarui data produk <strong class="text-primary"><?= e($product->name) ?></strong>.</p>
     </div>
     <a href="/products" class="py-2 px-3.5 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border border-border text-primary hover:bg-hover focus:outline-hidden transition-colors">
       <iconify-icon icon="lucide:arrow-left" class="size-4"></iconify-icon>
@@ -35,13 +35,13 @@
           type="text" 
           id="name" 
           name="name" 
-          value="<?= htmlspecialchars((string)$valName) ?>" 
+          value="<?= e((string)$valName) ?>" 
           placeholder="Contoh: Wireless Bluetooth Headset" 
           class="py-2.5 px-3.5 block w-full rounded-lg border <?= isset($errors['name']) ? 'border-rose-500 ring-1 ring-rose-500' : 'border-border' ?> bg-canvas text-primary text-sm focus:border-brand focus:ring-1 focus:ring-brand focus:outline-hidden transition-colors"
           required
         >
         <?php if (isset($errors['name'])): ?>
-          <p class="text-xs text-rose-500 mt-1"><?= htmlspecialchars($errors['name']) ?></p>
+          <p class="text-xs text-rose-500 mt-1"><?= e($errors['name']) ?></p>
         <?php endif; ?>
       </div>
 
@@ -55,7 +55,7 @@
             type="text" 
             id="sku" 
             name="sku" 
-            value="<?= htmlspecialchars((string)$valSku) ?>" 
+            value="<?= e((string)$valSku) ?>" 
             placeholder="Contoh: ELE-BLU-HEA-001" 
             class="py-2.5 px-3.5 block w-full font-mono rounded-lg border <?= isset($errors['sku']) ? 'border-rose-500 ring-1 ring-rose-500' : 'border-border' ?> bg-canvas text-primary text-sm focus:border-brand focus:ring-1 focus:ring-brand focus:outline-hidden uppercase transition-colors"
             required
@@ -63,7 +63,7 @@
         </div>
         <p class="text-xs text-muted mt-1">Hanya huruf besar, angka, dan strip (-). Harus unik.</p>
         <?php if (isset($errors['sku'])): ?>
-          <p class="text-xs text-rose-500 mt-1"><?= htmlspecialchars($errors['sku']) ?></p>
+          <p class="text-xs text-rose-500 mt-1"><?= e($errors['sku']) ?></p>
         <?php endif; ?>
       </div>
 
@@ -84,13 +84,13 @@
               <?php foreach ($categories as $cat): ?>
                 <?php $selected = $valCatId === (string)$cat->id ? 'selected' : ''; ?>
                 <option value="<?= $cat->id ?>" <?= $selected ?>>
-                  <?= htmlspecialchars($cat->name) ?>
+                  <?= e($cat->name) ?>
                 </option>
               <?php endforeach; ?>
             </select>
           </div>
           <?php if (isset($errors['category_id'])): ?>
-            <p class="text-xs text-rose-500 mt-1"><?= htmlspecialchars($errors['category_id']) ?></p>
+            <p class="text-xs text-rose-500 mt-1"><?= e($errors['category_id']) ?></p>
           <?php endif; ?>
         </div>
 
@@ -109,13 +109,13 @@
               <?php foreach ($suppliers as $sup): ?>
                 <?php $selected = $valSupId === (string)$sup->id ? 'selected' : ''; ?>
                 <option value="<?= $sup->id ?>" <?= $selected ?>>
-                  <?= htmlspecialchars($sup->name) ?>
+                  <?= e($sup->name) ?>
                 </option>
               <?php endforeach; ?>
             </select>
           </div>
           <?php if (isset($errors['supplier_id'])): ?>
-            <p class="text-xs text-rose-500 mt-1"><?= htmlspecialchars($errors['supplier_id']) ?></p>
+            <p class="text-xs text-rose-500 mt-1"><?= e($errors['supplier_id']) ?></p>
           <?php endif; ?>
         </div>
       </div>
@@ -137,14 +137,14 @@
               name="price" 
               step="1" 
               min="0"
-              value="<?= htmlspecialchars((string)$valPrice) ?>" 
+              value="<?= e((string)$valPrice) ?>" 
               placeholder="0" 
               class="py-2.5 ps-10 pe-3.5 block w-full rounded-lg border <?= isset($errors['price']) ? 'border-rose-500 ring-1 ring-rose-500' : 'border-border' ?> bg-canvas text-primary text-sm focus:border-brand focus:ring-1 focus:ring-brand focus:outline-hidden transition-colors"
               required
             >
           </div>
           <?php if (isset($errors['price'])): ?>
-            <p class="text-xs text-rose-500 mt-1"><?= htmlspecialchars($errors['price']) ?></p>
+            <p class="text-xs text-rose-500 mt-1"><?= e($errors['price']) ?></p>
           <?php endif; ?>
         </div>
 
@@ -159,13 +159,13 @@
             name="stock" 
             step="1" 
             min="0"
-            value="<?= htmlspecialchars((string)$valStock) ?>" 
+            value="<?= e((string)$valStock) ?>" 
             placeholder="0" 
             class="py-2.5 px-3.5 block w-full rounded-lg border <?= isset($errors['stock']) ? 'border-rose-500 ring-1 ring-rose-500' : 'border-border' ?> bg-canvas text-primary text-sm focus:border-brand focus:ring-1 focus:ring-brand focus:outline-hidden transition-colors"
             required
           >
           <?php if (isset($errors['stock'])): ?>
-            <p class="text-xs text-rose-500 mt-1"><?= htmlspecialchars($errors['stock']) ?></p>
+            <p class="text-xs text-rose-500 mt-1"><?= e($errors['stock']) ?></p>
           <?php endif; ?>
         </div>
       </div>
