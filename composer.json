@@ -26,6 +26,7 @@
         ],
         "db:pdo": "@php bin/pdo.php",
         "db:migrate": "@php bin/migrate.php",
+        "db:migrate:fresh": "@php bin/fresh.php",
         "test": "phpunit"
     }
 }
