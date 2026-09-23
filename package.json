@@ -8,8 +8,6 @@
     "build": "vite build",
     "preview": "vite preview",
     "fetch:data": "node scripts/fetch-products.js",
-    "process:data": "node scripts/translate-products.js && node scripts/convert-currency.js",
-    "pipeline": "pnpm run fetch:data && pnpm run process:data",
     "test": "vitest run --reporter=verbose",
     "test:e2e": "playwright test",
     "test:all": "pnpm run test && pnpm run test:e2e"

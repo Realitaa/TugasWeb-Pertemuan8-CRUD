@@ -24,12 +24,15 @@ async function fetchProducts() {
       const data = await res.json()
       total = data.total
 
-      const filtered = data.products.map(({ title, description, price, discountPercentage, rating, thumbnail }) => ({
+      const filtered = data.products.map(({ title, description, category, price, discountPercentage, rating, stock, sku, thumbnail }) => ({
         title,
         description,
+        category,
         price,
         discountPercentage,
         rating,
+        stock,
+        sku,
         thumbnail
       }))
 

@@ -57,7 +57,7 @@ try {
     }
 
     echo "\n";
-    exit(0);
+    return 0;
 } catch (Throwable $e) {
     if (isset($pdo) && $pdo instanceof PDO && $pdo->inTransaction()) {
         $pdo->rollBack();

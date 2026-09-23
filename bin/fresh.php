@@ -43,6 +43,11 @@ try {
 
     // Lanjut jalankan migrasi
     require __DIR__ . '/migrate.php';
+
+    // Cek apakah ada opsi --seed
+    if (in_array('--seed', $argv ?? [], true)) {
+        require __DIR__ . '/seed.php';
+    }
 } catch (Throwable $e) {
     if (isset($pdo) && $pdo instanceof PDO) {
         try {
