@@ -7,6 +7,13 @@ settings:
 importers:
 
   .:
+    dependencies:
+      iconify-icon:
+        specifier: ^3.0.3
+        version: 3.0.3
+      toastify-js:
+        specifier: ^1.12.0
+        version: 1.12.0
     devDependencies:
       '@playwright/test':
         specifier: ^1.62.1
@@ -20,9 +27,6 @@ importers:
       happy-dom:
         specifier: ^20.12.0
         version: 20.14.5
-      lucide:
-        specifier: ^1.37.0
-        version: 1.46.0
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
@@ -34,6 +38,9 @@ importers:
         version: 4.1.11(@types/node@26.5.1)(happy-dom@20.14.5)(vite@8.3.0(@types/node@26.5.1)(jiti@2.7.0))
 
 packages:
+
+  '@iconify/types@2.0.0':
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -375,6 +382,9 @@ packages:
     resolution: {integrity: sha512-4FbRdAX+bSdmo4AUFuS0WNiPz8NgFt+r8ThgNWmlrjQjt1Q7ZR9+zTlce2859x4KSXrwIsaeTqDoKQmtP8pLmQ==}
     engines: {node: '>= 0.8'}
 
+  iconify-icon@3.0.3:
+    resolution: {integrity: sha512-n4ZIChz3N75KqFSWLt9hHGzbrqGQeeoFxCE+nND4WFFa88x8AW8GvmnVZaVNYErhhiZkxJhBfVKMIGrF1wt3hg==}
+
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
@@ -530,9 +540,6 @@ packages:
     resolution: {integrity: sha512-WkUDrojuJs0xkgGf2udWxa3yGBRxPtxUkB79i6aCZLRgc7PM8fZe9TosfPDcvEpQZbuFASnHYmRLBLUbmLOIIA==}
     engines: {node: '>= 12.0.0'}
 
-  lucide@1.46.0:
-    resolution: {integrity: sha512-JAkmhp9rxxIAeyKZJPUdiDDz8szXEISxdd4elBp7nu75MWQIYQQ8p1u+conDwu7RG2TrESj3wo5G0dKNs/5ryA==}
-
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
@@ -624,6 +631,9 @@ packages:
   tinyrainbow@3.1.1:
     resolution: {integrity: sha512-yau8yJdTt989Mm0Bd/236QnzEiPf2xLLTqUZRUJOo/3CB078LSwzei343DgtJVmfJKJE3TMINY1u42SQsP6mXw==}
     engines: {node: '>=14.0.0'}
+
+  toastify-js@1.12.0:
+    resolution: {integrity: sha512-HeMHCO9yLPvP9k0apGSdPUWrUbLnxUKNFzgUoZp1PHCLploIX/4DSQ7V8H25ef+h4iO9n0he7ImfcndnN6nDrQ==}
 
   toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
@@ -747,6 +757,8 @@ packages:
         optional: true
 
 snapshots:
+
+  '@iconify/types@2.0.0': {}
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -1019,6 +1031,10 @@ snapshots:
       statuses: 2.0.2
       toidentifier: 1.0.1
 
+  iconify-icon@3.0.3:
+    dependencies:
+      '@iconify/types': 2.0.0
+
   inherits@2.0.4: {}
 
   jiti@2.7.0: {}
@@ -1121,8 +1137,6 @@ snapshots:
       lightningcss-win32-arm64-msvc: 1.33.0
       lightningcss-win32-x64-msvc: 1.33.0
 
-  lucide@1.46.0: {}
-
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
@@ -1200,6 +1214,8 @@ snapshots:
       picomatch: 4.0.7
 
   tinyrainbow@3.1.1: {}
+
+  toastify-js@1.12.0: {}
 
   toidentifier@1.0.1: {}
 

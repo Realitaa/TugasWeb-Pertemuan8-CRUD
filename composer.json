@@ -9,7 +9,8 @@
             "Database\\": "database/"
         },
         "files": [
-            "app/Vite/helpers.php"
+            "app/Vite/helpers.php",
+            "app/Support/helpers.php"
         ]
     },
     "require": {

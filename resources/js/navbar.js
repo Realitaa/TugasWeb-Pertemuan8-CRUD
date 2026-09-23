@@ -103,11 +103,11 @@ export function setupNavbar() {
 
     if (themeToggleIcon) {
       if (theme === 'light') {
-        themeToggleIcon.innerHTML = '<i data-lucide="sun" class="size-4"></i>'
+        themeToggleIcon.innerHTML = '<iconify-icon icon="lucide:sun" class="size-4"></iconify-icon>'
       } else if (theme === 'dark') {
-        themeToggleIcon.innerHTML = '<i data-lucide="moon" class="size-4"></i>'
+        themeToggleIcon.innerHTML = '<iconify-icon icon="lucide:moon" class="size-4"></iconify-icon>'
       } else {
-        themeToggleIcon.innerHTML = '<i data-lucide="laptop" class="size-4"></i>'
+        themeToggleIcon.innerHTML = '<iconify-icon icon="lucide:laptop" class="size-4"></iconify-icon>'
       }
     }
   }

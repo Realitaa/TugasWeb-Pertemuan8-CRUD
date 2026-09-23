@@ -49,3 +49,50 @@ html {
   --color-hover: var(--hover);
   --color-ring: var(--ring);
 }
+
+.toastify.custom-toast {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 99999;
+}
+
+.toastify.custom-toast-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.toastify.custom-toast-error {
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+.toastify.custom-toast-info {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.toastify.custom-toast-warning {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.toastify .toast-close {
+  opacity: 0.75;
+  font-size: 1.125rem;
+  padding: 0 0 0 8px;
+  transition: opacity 0.2s ease;
+}
+
+.toastify .toast-close:hover {
+  opacity: 1;
+}

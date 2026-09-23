@@ -40,7 +40,7 @@ export function setupProducts() {
           <div class="p-4 flex flex-col flex-1">
             <div class="flex items-center justify-between gap-2 mb-2">
               <span class="text-xs font-medium inline-flex items-center gap-1 shrink-0 self-center">
-                <i data-lucide="star" class="size-3.5 fill-amber-400 text-amber-400 shrink-0"></i>
+                <iconify-icon icon="lucide:star" class="size-3.5 fill-amber-400 text-amber-400 shrink-0"></iconify-icon>
                 <span>${product.rating}</span>
               </span>
               <div class="text-right flex flex-col items-end shrink-0 min-w-0">

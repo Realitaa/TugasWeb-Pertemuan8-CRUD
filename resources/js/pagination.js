@@ -19,7 +19,7 @@ export function renderPagination({ container, currentPage, totalPages, onPageCha
   let html = `
     <!-- Tombol Sebelumnya -->
     <button type="button" data-page="${currentPage - 1}" ${isPrevDisabled ? 'disabled' : ''} class="min-h-9.5 min-w-9.5 py-2 px-2.5 inline-flex justify-center items-center gap-x-1.5 text-sm first:rounded-s-lg last:rounded-e-lg border border-border text-primary hover:bg-hover focus:outline-hidden disabled:opacity-40 disabled:pointer-events-none cursor-pointer disabled:cursor-not-allowed" aria-label="Previous">
-      <i data-lucide="chevron-left" class="shrink-0 size-3.5"></i>
+      <iconify-icon icon="lucide:chevron-left" class="shrink-0 size-3.5"></iconify-icon>
       <span class="hidden sm:block">Sebelumnya</span>
     </button>
   `
@@ -62,7 +62,7 @@ export function renderPagination({ container, currentPage, totalPages, onPageCha
   html += `
     <button type="button" data-page="${currentPage + 1}" ${isNextDisabled ? 'disabled' : ''} class="min-h-9.5 min-w-9.5 py-2 px-2.5 inline-flex justify-center items-center gap-x-1.5 text-sm first:rounded-s-lg last:rounded-e-lg border border-border text-primary hover:bg-hover focus:outline-hidden disabled:opacity-40 disabled:pointer-events-none cursor-pointer disabled:cursor-not-allowed" aria-label="Next">
       <span class="hidden sm:block">Selanjutnya</span>
-      <i data-lucide="chevron-right" class="shrink-0 size-3.5"></i>
+      <iconify-icon icon="lucide:chevron-right" class="shrink-0 size-3.5"></iconify-icon>
     </button>
   `
 

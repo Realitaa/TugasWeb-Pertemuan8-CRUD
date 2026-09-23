@@ -1,9 +1,10 @@
+import 'iconify-icon'
 import '../css/app.css'
 import { setupNavbar } from './navbar.js'
 import { setupProducts } from './products.js'
 import './initVal.js'
-import { setupIconObserver } from './initIcon.js'
+import { initFlashToast } from './toast.js'
 
-setupIconObserver()
 setupNavbar()
 setupProducts()
+initFlashToast()
