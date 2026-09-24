@@ -32,7 +32,10 @@ data/*
 test-results/
 playwright-report/
 blob-report/
-.nyc_output/# Logs
+.nyc_output/
+!tests/screenshots/
+!tests/screenshots/**
+# Logs
 logs
 *.log
 npm-debug.log*
