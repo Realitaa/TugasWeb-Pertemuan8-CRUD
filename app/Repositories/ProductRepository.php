@@ -183,18 +183,22 @@ class ProductRepository
     public function create(Product $product): int
     {
         $sql = "
-            INSERT INTO products (category_id, supplier_id, name, sku, price, stock)
-            VALUES (:category_id, :supplier_id, :name, :sku, :price, :stock)
+            INSERT INTO products (category_id, supplier_id, name, sku, price, stock, description, discount_percentage, rating, thumbnail)
+            VALUES (:category_id, :supplier_id, :name, :sku, :price, :stock, :description, :discount_percentage, :rating, :thumbnail)
         ";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
-            ':category_id' => $product->categoryId,
-            ':supplier_id' => $product->supplierId,
-            ':name'        => $product->name,
-            ':sku'         => $product->sku,
-            ':price'       => $product->price,
-            ':stock'       => $product->stock,
+            ':category_id'         => $product->categoryId,
+            ':supplier_id'         => $product->supplierId,
+            ':name'                => $product->name,
+            ':sku'                 => $product->sku,
+            ':price'               => $product->price,
+            ':stock'               => $product->stock,
+            ':description'         => $product->description,
+            ':discount_percentage' => $product->discountPercentage,
+            ':rating'              => $product->rating,
+            ':thumbnail'           => $product->thumbnail,
         ]);
 
         return (int) $this->pdo->lastInsertId();
@@ -217,19 +221,27 @@ class ProductRepository
                 name = :name,
                 sku = :sku,
                 price = :price,
-                stock = :stock
+                stock = :stock,
+                description = :description,
+                discount_percentage = :discount_percentage,
+                rating = :rating,
+                thumbnail = :thumbnail
             WHERE id = :id
         ";
 
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
-            ':id'          => $product->id,
-            ':category_id' => $product->categoryId,
-            ':supplier_id' => $product->supplierId,
-            ':name'        => $product->name,
-            ':sku'         => $product->sku,
-            ':price'       => $product->price,
-            ':stock'       => $product->stock,
+            ':id'                  => $product->id,
+            ':category_id'         => $product->categoryId,
+            ':supplier_id'         => $product->supplierId,
+            ':name'                => $product->name,
+            ':sku'                 => $product->sku,
+            ':price'               => $product->price,
+            ':stock'               => $product->stock,
+            ':description'         => $product->description,
+            ':discount_percentage' => $product->discountPercentage,
+            ':rating'              => $product->rating,
+            ':thumbnail'           => $product->thumbnail,
         ]);
     }
 

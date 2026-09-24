@@ -14,6 +14,10 @@ class Product
         public string $sku = '',
         public float $price = 0.0,
         public int $stock = 0,
+        public ?string $description = null,
+        public ?float $discountPercentage = null,
+        public ?float $rating = null,
+        public ?string $thumbnail = null,
         public ?string $createdAt = null,
         public ?string $updatedAt = null,
         public ?string $categoryName = null,
@@ -33,6 +37,12 @@ class Product
             sku: (string) ($data['sku'] ?? ''),
             price: isset($data['price']) ? (float) $data['price'] : 0.0,
             stock: isset($data['stock']) ? (int) $data['stock'] : 0,
+            description: isset($data['description']) && trim((string) $data['description']) !== '' ? (string) $data['description'] : null,
+            discountPercentage: isset($data['discount_percentage']) && $data['discount_percentage'] !== '' 
+                ? (float) $data['discount_percentage'] 
+                : (isset($data['discountPercentage']) && $data['discountPercentage'] !== '' ? (float) $data['discountPercentage'] : null),
+            rating: isset($data['rating']) && $data['rating'] !== '' ? (float) $data['rating'] : null,
+            thumbnail: isset($data['thumbnail']) && trim((string) $data['thumbnail']) !== '' ? (string) $data['thumbnail'] : null,
             createdAt: isset($data['created_at']) ? (string) $data['created_at'] : null,
             updatedAt: isset($data['updated_at']) ? (string) $data['updated_at'] : null,
             categoryName: isset($data['category_name']) ? (string) $data['category_name'] : null,
@@ -46,13 +56,17 @@ class Product
     public function toArray(): array
     {
         return [
-            'id'          => $this->id,
-            'category_id' => $this->categoryId,
-            'supplier_id' => $this->supplierId,
-            'name'        => $this->name,
-            'sku'         => $this->sku,
-            'price'       => $this->price,
-            'stock'       => $this->stock,
+            'id'                  => $this->id,
+            'category_id'         => $this->categoryId,
+            'supplier_id'         => $this->supplierId,
+            'name'                => $this->name,
+            'sku'                 => $this->sku,
+            'price'               => $this->price,
+            'stock'               => $this->stock,
+            'description'         => $this->description,
+            'discount_percentage' => $this->discountPercentage,
+            'rating'              => $this->rating,
+            'thumbnail'           => $this->thumbnail,
         ];
     }
 

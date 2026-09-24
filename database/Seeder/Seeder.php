@@ -92,8 +92,8 @@ class Seeder
         $catStmtInsert = $this->pdo->prepare("INSERT INTO categories (name) VALUES (:name)");
 
         $prodStmt = $this->pdo->prepare(
-            "INSERT INTO products (category_id, supplier_id, name, sku, price, stock) 
-             VALUES (:category_id, :supplier_id, :name, :sku, :price, :stock)"
+            "INSERT INTO products (category_id, supplier_id, name, sku, price, stock, description, discount_percentage, rating, thumbnail) 
+             VALUES (:category_id, :supplier_id, :name, :sku, :price, :stock, :description, :discount_percentage, :rating, :thumbnail)"
         );
 
         $productCount = 0;
@@ -126,14 +126,22 @@ class Seeder
             $name = (string) ($p['title'] ?? 'Unnamed Product');
             $price = (float) ($p['price'] ?? 0);
             $stock = (int) ($p['stock'] ?? rand(10, 100));
+            $description = isset($p['description']) && trim((string)$p['description']) !== '' ? (string)$p['description'] : null;
+            $discountPercentage = isset($p['discountPercentage']) ? (float)$p['discountPercentage'] : 0.0;
+            $rating = isset($p['rating']) ? (float)$p['rating'] : null;
+            $thumbnail = isset($p['thumbnail']) && trim((string)$p['thumbnail']) !== '' ? (string)$p['thumbnail'] : null;
 
             $prodStmt->execute([
-                'category_id' => $categoryId,
-                'supplier_id' => $supplierId,
-                'name'        => $name,
-                'sku'         => $sku,
-                'price'       => $price,
-                'stock'       => $stock,
+                'category_id'         => $categoryId,
+                'supplier_id'         => $supplierId,
+                'name'                => $name,
+                'sku'                 => $sku,
+                'price'               => $price,
+                'stock'               => $stock,
+                'description'         => $description,
+                'discount_percentage' => $discountPercentage,
+                'rating'              => $rating,
+                'thumbnail'           => $thumbnail,
             ]);
 
             $productCount++;

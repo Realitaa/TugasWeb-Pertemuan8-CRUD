@@ -252,6 +252,42 @@ class ProductService
             $errors['stock'] = 'Stok produk harus berupa bilangan bulat positif atau 0.';
         }
 
+        // Diskon opsional (limit 1-100)
+        if (isset($data['discount_percentage']) && trim((string) $data['discount_percentage']) !== '') {
+            $discountStr = trim((string) $data['discount_percentage']);
+            if (!is_numeric($discountStr)) {
+                $errors['discount_percentage'] = 'Persentase diskon harus berupa angka.';
+            } else {
+                $discount = (float) $discountStr;
+                if ($discount < 1 || $discount > 100) {
+                    $errors['discount_percentage'] = 'Persentase diskon harus bernilai antara 1 sampai 100%.';
+                }
+            }
+        }
+
+        // Rating opsional (limit 5 dengan 2 angka di belakang koma)
+        if (isset($data['rating']) && trim((string) $data['rating']) !== '') {
+            $ratingStr = trim((string) $data['rating']);
+            if (!is_numeric($ratingStr)) {
+                $errors['rating'] = 'Rating harus berupa angka.';
+            } else {
+                $rating = (float) $ratingStr;
+                if ($rating < 0 || $rating > 5) {
+                    $errors['rating'] = 'Rating harus bernilai antara 0 sampai 5.';
+                } elseif (!preg_match('/^\d+(\.\d{1,2})?$/', $ratingStr)) {
+                    $errors['rating'] = 'Rating maksimal memiliki 2 angka di belakang koma (contoh: 4.85).';
+                }
+            }
+        }
+
+        // Link gambar opsional (input string)
+        if (isset($data['thumbnail']) && trim((string) $data['thumbnail']) !== '') {
+            $thumbnail = trim((string) $data['thumbnail']);
+            if (mb_strlen($thumbnail) > 500) {
+                $errors['thumbnail'] = 'Link gambar maksimal 500 karakter.';
+            }
+        }
+
         return $errors;
     }
 }
