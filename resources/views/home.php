@@ -1,3 +1,7 @@
+<script>
+  window.__PRODUCTS_DATA__ = <?= json_encode($productsData ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+</script>
+
 <div class="space-y-12">
   <!-- Hero / Greeting -->
   <div>

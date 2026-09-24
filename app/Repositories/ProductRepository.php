@@ -96,7 +96,7 @@ class ProductRepository
      *
      * @return array<Product>
      */
-    public function allWithRelations(?string $search = null): array
+    public function allWithRelations(?string $search = null, string $order = 'ASC'): array
     {
         $whereClause = '';
         $params = [];
@@ -111,6 +111,8 @@ class ProductRepository
             $params[':search_sup'] = $searchWildcard;
         }
 
+        $sortDirection = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+
         $sql = "
             SELECT 
                 p.*,
@@ -120,7 +122,7 @@ class ProductRepository
             LEFT JOIN categories c ON p.category_id = c.id
             LEFT JOIN suppliers s ON p.supplier_id = s.id
             {$whereClause}
-            ORDER BY p.id DESC
+            ORDER BY p.id {$sortDirection}
         ";
 
         $stmt = $this->pdo->prepare($sql);

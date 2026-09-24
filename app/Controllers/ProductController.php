@@ -13,6 +13,37 @@ class ProductController
     ) {}
 
     /**
+     * Display catalog home page with products from database.
+     */
+    public function home(): void
+    {
+        $products = $this->productService->getAllProducts(null, 'ASC');
+
+        $productsData = array_map(function ($p) {
+            return [
+                'id'                 => $p->id,
+                'title'              => $p->name,
+                'name'               => $p->name,
+                'sku'                => $p->sku,
+                'price'              => $p->price,
+                'stock'              => $p->stock,
+                'description'        => $p->description ?? '',
+                'discountPercentage' => $p->discountPercentage ?? 0,
+                'rating'             => $p->rating,
+                'thumbnail'          => $p->thumbnail,
+                'category'           => $p->categoryName ?? 'Umum',
+                'supplier'           => $p->supplierName ?? '-',
+            ];
+        }, $products);
+
+        view('home', [
+            'title'        => 'RealCommerce - Katalog Produk Belanja Online Responsif',
+            'activeNav'    => 'home',
+            'productsData' => $productsData,
+        ]);
+    }
+
+    /**
      * Display listing of products.
      */
     public function index(): void

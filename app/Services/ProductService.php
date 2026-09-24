@@ -60,6 +60,16 @@ class ProductService
     }
 
     /**
+     * Get all products with relations.
+     *
+     * @return array<Product>
+     */
+    public function getAllProducts(?string $search = null, string $order = 'ASC'): array
+    {
+        return $this->productRepo->allWithRelations($search, $order);
+    }
+
+    /**
      * Find product by ID.
      */
     public function getProductById(int $id): ?Product

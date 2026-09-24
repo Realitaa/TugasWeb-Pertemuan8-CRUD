@@ -28,10 +28,7 @@ $productController = new ProductController();
 switch ($path) {
     case '/':
     case '/index.php':
-        view('home', [
-            'title'     => 'RealCommerce - Katalog Produk Belanja Online Responsif',
-            'activeNav' => 'home',
-        ]);
+        $productController->home();
         break;
 
     case '/products':
