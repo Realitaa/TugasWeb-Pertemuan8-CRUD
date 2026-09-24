@@ -9,10 +9,24 @@ use PDO;
 
 class DatabaseResetService
 {
+    protected ?PDO $pdo = null;
+
     public function __construct(
-        protected ?PDO $pdo = null
+        ?PDO $pdo = null
     ) {
-        $this->pdo = $pdo ?? require dirname(__DIR__, 2) . '/database/pdo.php';
+        $this->pdo = $pdo;
+    }
+
+    /**
+     * Get or initialize PDO connection lazily.
+     */
+    public function getPdo(): PDO
+    {
+        if ($this->pdo === null) {
+            $this->pdo = require dirname(__DIR__, 2) . '/database/pdo.php';
+        }
+
+        return $this->pdo;
     }
 
     /**
@@ -38,17 +52,18 @@ class DatabaseResetService
     public function resetAndSeed(): bool
     {
         $root = dirname(__DIR__, 2);
+        $pdo = $this->getPdo();
 
-        $this->pdo->exec("SET FOREIGN_KEY_CHECKS = 0;");
+        $pdo->exec("SET FOREIGN_KEY_CHECKS = 0;");
 
-        $stmt = $this->pdo->query("SHOW FULL TABLES WHERE Table_type = 'BASE TABLE'");
+        $stmt = $pdo->query("SHOW FULL TABLES WHERE Table_type = 'BASE TABLE'");
         $tables = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
         foreach ($tables as $table) {
-            $this->pdo->exec("DROP TABLE IF EXISTS `{$table}`");
+            $pdo->exec("DROP TABLE IF EXISTS `{$table}`");
         }
 
-        $this->pdo->exec("SET FOREIGN_KEY_CHECKS = 1;");
+        $pdo->exec("SET FOREIGN_KEY_CHECKS = 1;");
 
         // Run migrations
         $migrationsDir = $root . '/database/migrations';
@@ -57,13 +72,13 @@ class DatabaseResetService
 
         foreach ($migrationFiles as $file) {
             $sql = file_get_contents($file);
-            $this->pdo->exec($sql);
+            $pdo->exec($sql);
         }
 
         // Run seeder silently without polluting HTTP output
         ob_start();
         try {
-            $seeder = new Seeder($this->pdo);
+            $seeder = new Seeder($pdo);
             $seeder->run();
         } finally {
             ob_end_clean();

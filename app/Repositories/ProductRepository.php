@@ -9,11 +9,27 @@ use Realitaa\PhpVite\Models\Product;
 
 class ProductRepository
 {
-    protected PDO $pdo;
+    protected ?PDO $pdo = null;
 
     public function __construct(?PDO $pdo = null)
     {
-        $this->pdo = $pdo ?? require dirname(__DIR__, 2) . '/database/pdo.php';
+        $this->pdo = $pdo;
+    }
+
+    /**
+     * Get or initialize PDO connection lazily.
+     */
+    public function getPdo(): ?PDO
+    {
+        if ($this->pdo === null) {
+            try {
+                $this->pdo = require dirname(__DIR__, 2) . '/database/pdo.php';
+            } catch (\Throwable) {
+                return null;
+            }
+        }
+
+        return $this->pdo;
     }
 
     /**
@@ -26,6 +42,17 @@ class ProductRepository
         $page = max(1, $page);
         $perPage = max(1, $perPage);
         $offset = ($page - 1) * $perPage;
+
+        $pdo = $this->getPdo();
+        if ($pdo === null) {
+            return [
+                'items'       => [],
+                'total'       => 0,
+                'currentPage' => $page,
+                'perPage'     => $perPage,
+                'totalPages'  => 1,
+            ];
+        }
 
         $whereClause = '';
         $params = [];
@@ -48,7 +75,7 @@ class ProductRepository
             LEFT JOIN suppliers s ON p.supplier_id = s.id
             {$whereClause}
         ";
-        $countStmt = $this->pdo->prepare($countSql);
+        $countStmt = $pdo->prepare($countSql);
         foreach ($params as $key => $val) {
             $countStmt->bindValue($key, $val, PDO::PARAM_STR);
         }
@@ -71,7 +98,7 @@ class ProductRepository
             LIMIT :limit OFFSET :offset
         ";
 
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $pdo->prepare($sql);
         foreach ($params as $key => $val) {
             $stmt->bindValue($key, $val, PDO::PARAM_STR);
         }
@@ -98,6 +125,11 @@ class ProductRepository
      */
     public function allWithRelations(?string $search = null, string $order = 'ASC'): array
     {
+        $pdo = $this->getPdo();
+        if ($pdo === null) {
+            return [];
+        }
+
         $whereClause = '';
         $params = [];
 
@@ -125,7 +157,7 @@ class ProductRepository
             ORDER BY p.id {$sortDirection}
         ";
 
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $pdo->prepare($sql);
         foreach ($params as $key => $val) {
             $stmt->bindValue($key, $val, PDO::PARAM_STR);
         }
@@ -141,6 +173,11 @@ class ProductRepository
      */
     public function findById(int $id): ?Product
     {
+        $pdo = $this->getPdo();
+        if ($pdo === null) {
+            return null;
+        }
+
         $sql = "
             SELECT 
                 p.*,
@@ -153,7 +190,7 @@ class ProductRepository
             LIMIT 1
         ";
 
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $pdo->prepare($sql);
         $stmt->execute([':id' => $id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -165,6 +202,11 @@ class ProductRepository
      */
     public function isSkuUnique(string $sku, ?int $excludeId = null): bool
     {
+        $pdo = $this->getPdo();
+        if ($pdo === null) {
+            return true;
+        }
+
         $sql = "SELECT COUNT(*) FROM products WHERE sku = :sku";
         $params = [':sku' => $sku];
 
@@ -173,7 +215,7 @@ class ProductRepository
             $params[':excludeId'] = $excludeId;
         }
 
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
 
         return ((int) $stmt->fetchColumn()) === 0;
@@ -184,12 +226,17 @@ class ProductRepository
      */
     public function create(Product $product): int
     {
+        $pdo = $this->getPdo();
+        if ($pdo === null) {
+            return 0;
+        }
+
         $sql = "
             INSERT INTO products (category_id, supplier_id, name, sku, price, stock, description, discount_percentage, rating, thumbnail)
             VALUES (:category_id, :supplier_id, :name, :sku, :price, :stock, :description, :discount_percentage, :rating, :thumbnail)
         ";
 
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $pdo->prepare($sql);
         $stmt->execute([
             ':category_id'         => $product->categoryId,
             ':supplier_id'         => $product->supplierId,
@@ -203,7 +250,7 @@ class ProductRepository
             ':thumbnail'           => $product->thumbnail,
         ]);
 
-        return (int) $this->pdo->lastInsertId();
+        return (int) $pdo->lastInsertId();
     }
 
     /**
@@ -212,6 +259,11 @@ class ProductRepository
     public function update(Product $product): bool
     {
         if ($product->id === null) {
+            return false;
+        }
+
+        $pdo = $this->getPdo();
+        if ($pdo === null) {
             return false;
         }
 
@@ -231,7 +283,7 @@ class ProductRepository
             WHERE id = :id
         ";
 
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $pdo->prepare($sql);
         return $stmt->execute([
             ':id'                  => $product->id,
             ':category_id'         => $product->categoryId,
@@ -252,7 +304,12 @@ class ProductRepository
      */
     public function delete(int $id): bool
     {
-        $stmt = $this->pdo->prepare("DELETE FROM products WHERE id = :id");
+        $pdo = $this->getPdo();
+        if ($pdo === null) {
+            return false;
+        }
+
+        $stmt = $pdo->prepare("DELETE FROM products WHERE id = :id");
         return $stmt->execute([':id' => $id]);
     }
 
@@ -261,7 +318,8 @@ class ProductRepository
      */
     public function beginTransaction(): bool
     {
-        return $this->pdo->beginTransaction();
+        $pdo = $this->getPdo();
+        return $pdo ? $pdo->beginTransaction() : false;
     }
 
     /**
@@ -269,7 +327,8 @@ class ProductRepository
      */
     public function commit(): bool
     {
-        return $this->pdo->commit();
+        $pdo = $this->getPdo();
+        return $pdo ? $pdo->commit() : false;
     }
 
     /**
@@ -277,8 +336,9 @@ class ProductRepository
      */
     public function rollBack(): bool
     {
-        if ($this->pdo->inTransaction()) {
-            return $this->pdo->rollBack();
+        $pdo = $this->getPdo();
+        if ($pdo && $pdo->inTransaction()) {
+            return $pdo->rollBack();
         }
         return false;
     }
@@ -288,6 +348,7 @@ class ProductRepository
      */
     public function inTransaction(): bool
     {
-        return $this->pdo->inTransaction();
+        $pdo = $this->getPdo();
+        return $pdo ? $pdo->inTransaction() : false;
     }
 }
