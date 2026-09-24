@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "fetch:data": "node scripts/fetch-products.js",
+    "key:generate": "node scripts/generate-key.js",
     "test": "vitest run --reporter=verbose",
     "test:e2e": "playwright test",
     "test:all": "pnpm run test && pnpm run test:e2e"

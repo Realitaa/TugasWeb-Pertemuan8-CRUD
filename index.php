@@ -9,6 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require __DIR__ . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;
+use Realitaa\PhpVite\Controllers\DatabaseResetController;
 use Realitaa\PhpVite\Controllers\ProductController;
 
 $dotenv = Dotenv::createImmutable(__DIR__);
@@ -64,6 +65,16 @@ switch ($path) {
             $productController->destroy();
         } else {
             redirect('/products');
+        }
+        break;
+
+    case '/api/db/reset':
+    case '/db/reset':
+        if ($method === 'POST') {
+            (new DatabaseResetController())->handle();
+        } else {
+            http_response_code(403);
+            exit;
         }
         break;
 
